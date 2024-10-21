@@ -3,7 +3,7 @@ import os.path
 from flask import Flask,  jsonify, request, render_template, send_from_directory
 from flask_cors import CORS
 
-app = Flask(__name__, static_folder='../client/static', template_folder='../client')
+app = Flask(__name__, template_folder='../client')
 CORS(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,10 +18,6 @@ def get_index():
 @app.route('/script.js')
 def get_script():
     return render_template('script.js', name='mark')
-
-@app.route('/style.css')
-def get_style():
-    return render_template('style.css', name='mark')
 
 @app.route('/api/duplicates', methods=['GET'])
 def get_duplicates():
