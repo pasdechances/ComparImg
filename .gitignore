@@ -1,7 +1,9 @@
-!*/
-!.gitignore
-!.gitkeep
+
 img/*
 image_hashes.csv
 error.json
 resultats.json
+
+!*/
+!.gitignore
+!.gitkeep
