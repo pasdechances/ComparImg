@@ -29,7 +29,7 @@ function displayPage(page) {
         const [group_id, imgs] = duplicates[i];
         
         imgs.forEach(img => {
-            const imgBlock = createImageElement(img.image_id, img.image_path);
+            const imgBlock = createImageElement(group_id, img.image_id, img.image_path);
             block.appendChild(imgBlock);
         });
 
@@ -38,12 +38,12 @@ function displayPage(page) {
     }
 }
 
-function createImageElement(id, path) {
+function createImageElement(group_id, image_id, image_path) {
     const imgElement = document.createElement('img');
     //imgElement.src = path;
-    imgElement.id = id
-    imgElement.src = `${API}/${path.split('/').pop()}`;
-    imgElement.alt = 'Image en double';
+    imgElement.id = group_id+'_'+image_id
+    imgElement.src = `${API}/img/${group_id}/${image_id}`;
+    imgElement.alt = image_path;
     imgElement.style.width = '200px';
     imgElement.style.margin = '10px';
     return imgElement;

@@ -1,14 +1,15 @@
 import json
 import os.path
-from flask import Flask,  jsonify, request, render_template
+from flask import Flask,  jsonify, request, render_template, send_from_directory
 from flask_cors import CORS
 
-app = Flask(__name__, static_folder='../data/img', template_folder='../client')
+app = Flask(__name__, template_folder='../client')
 CORS(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, '../data')
+DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'data'))
 JSON_FILE = os.path.join(DATA_DIR, 'resultats.json')
+IMAGE_DIR = os.path.join(DATA_DIR, 'img')
 
 @app.route('/', methods=['GET'])
 def get_index():
@@ -30,6 +31,17 @@ def keep_all():
     update_result_file(data, "keepall")
     return jsonify({"status": "success", "message": "Tag keepall ajouté avec succès"})
 
+@app.route('/img/<group_id>/<image_id>')
+def serve_image(group_id, image_id):
+    with open(os.path.join(DATA_DIR, 'resultats.json'), 'r') as f:
+        data = json.load(f)
+    if group_id in data:
+        for img in data[group_id]:
+            if str(img['image_id']) == image_id:
+                img_path = img['image_path']
+                filename = os.path.basename(img_path)
+                return send_from_directory(IMAGE_DIR, filename)
+    return "Image not found", 404
 
 def update_result_file(data, tag):
     with open(JSON_FILE, 'r') as f:
