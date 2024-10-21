@@ -4,22 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualisation des Images en Double</title>
-</head>
-<body style="display: flex;
+    <style>
+        .container{
+            display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;">
+            justify-content: center;
+        }
+
+        .row{
+            border-style: solid;
+            border-color: gray;
+            border-radius: 10px;
+            border-width: 1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .pageIndicator{
+            display: flex;
+            justify-content: space-between;
+            width: 100px;
+        }
+
+        .img{
+            width: 200px;
+            margin: 10px;
+        }
+
+        .keep{
+            border-style: solid;
+            border-color: green;
+            border-radius: 10px;
+            border-width: 5px;
+        }
+
+        .trash{
+            opacity: 0.2;
+        }
+
+    </style>
+</head>
+<body class="container">
     <h1 >Images en Double</h1>
-    <div id="image-container" 
-        style="display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;">
-    </div>
+    <div id="image-container" class="container"></div>
     
-    <div style="display: flex;
-                justify-content: space-between;
-                width: 100px;">
+    <div class="pageIndicator">
         <button id="prev-button" disabled><<</button>
         <span id="page"></span>
         <button id="next-button">>></button>

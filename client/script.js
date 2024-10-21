@@ -25,15 +25,15 @@ function displayPage(page) {
     const endIndex = Math.min(startIndex + itemsPerPage, duplicates.length);
 
     for (let i = startIndex; i < endIndex; i++) {
-        let block = createContainerElement()
+        let row = createRowElement()
         const [group_id, imgs] = duplicates[i];
         
         imgs.forEach(img => {
             const imgBlock = createImageElement(group_id, img.image_id, img.image_path, img.tag);
-            block.appendChild(imgBlock);
+            row.appendChild(imgBlock);
         });
 
-        container.appendChild(block);
+        container.appendChild(row);
         container.appendChild(document.createElement('br'));
     }
 }
@@ -44,28 +44,18 @@ function createImageElement(group_id, image_id, image_path, tag) {
     imgElement.id = group_id+'_'+image_id
     imgElement.src = `${API}/img/${group_id}/${image_id}`;
     imgElement.alt = image_path;
-    imgElement.style.width = '200px';
-    imgElement.style.margin = '10px';
+    imgElement.classList.add('img');
     if(tag == "keep")
-        imgElement.style.borderStyle = 'solid';
-        imgElement.style.borderColor = 'green';
-        imgElement.style.borderRadius = '10px';
-        imgElement.style.borderWidth = '5px';
-    
-    if(tag == "trash")
-        imgElement.style.opacity = '0.2';
-    
+        imgElement.classList.add('keep');
+    else
+        imgElement.classList.add('trash');
+
     return imgElement;
 }
 
-function createContainerElement() {
+function createRowElement() {
     const element = document.createElement('div');
-    element.style.borderStyle = 'solid';
-    element.style.borderColor = 'grey';
-    element.style.borderRadius = '10px';
-    element.style.borderWidth = '1px';
-    element.style.display = 'flex';
-    element.style.alignItems = 'center';
+    element.classList.add('row');
     return element;
 }
 
@@ -89,6 +79,32 @@ function updatePaginationControls() {
     nextButton.disabled = currentPage === Math.ceil(duplicates.length / itemsPerPage);
 }
 
+
+function updateImageTag(group_id, image_id, newTag, imgElement) {
+    
+    //fetch(API + '/api/trow/<group_id>/<image_id>'
+    fetch(API + '/api/keep/<group_id>/<image_id>', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ group_id, image_id, newTag })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            if (newTag === 'keep') {
+                imgElement.classList.replace('trash', 'keep');
+            } else if (newTag === 'trash') {
+                imgElement.classList.replace('keep', 'trash');
+            }
+        } else {
+            console.error('Failed to update the tag.');
+        }
+    })
+    .catch(error => console.error('Erreur lors de la mise à jour du tag:', error));
+}
+
 prevButton.addEventListener('click', () => {
     if (currentPage > 1) {
         currentPage--;
@@ -104,3 +120,6 @@ nextButton.addEventListener('click', () => {
         updatePaginationControls();
     }
 });
+
+
+
