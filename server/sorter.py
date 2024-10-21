@@ -3,11 +3,12 @@ import json
 import shutil
 
 
-
-INPUT_FILE = 'resultats.json'
-IMG_FOLDER = './img'
-ARCHIVE_FOLDER = './archive'
-TRASH_FOLDER = './imgTrash'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, '../data')
+INPUT_FILE = os.path.join(DATA_DIR, 'resultats.json')
+IMG_FOLDER = os.path.join(DATA_DIR, '/img')
+ARCHIVE_FOLDER = os.path.join(DATA_DIR, '/archive')
+TRASH_FOLDER = os.path.join(DATA_DIR, '/imgTrash')
 
 def load_tags(json_file):
     with open(json_file, 'r') as f:

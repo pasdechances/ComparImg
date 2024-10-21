@@ -6,9 +6,10 @@ const nextButton = document.getElementById('next-button');
 let duplicates = [];
 const itemsPerPage = 10;
 let currentPage = 1;
+const API = 'http://localhost:5000';
 
 // Charger les données JSON via l'API Flask
-fetch('http://127.0.0.1:5000/api/duplicates')
+fetch(API+'/api/duplicates')
     .then(response => response.json())
     .then(data => {
         duplicates = Object.entries(data); 
@@ -28,7 +29,7 @@ function displayPage(page) {
         const [group_id, imgs] = duplicates[i];
         
         imgs.forEach(img => {
-            const imgBlock = createImageElement(img.image_path);
+            const imgBlock = createImageElement(img.image_id, img.image_path);
             block.appendChild(imgBlock);
         });
 
@@ -37,9 +38,11 @@ function displayPage(page) {
     }
 }
 
-function createImageElement(path) {
+function createImageElement(id, path) {
     const imgElement = document.createElement('img');
-    imgElement.src = path;
+    //imgElement.src = path;
+    imgElement.id = id
+    imgElement.src = `${API}/${path.split('/').pop()}`;
     imgElement.alt = 'Image en double';
     imgElement.style.width = '200px';
     imgElement.style.margin = '10px';

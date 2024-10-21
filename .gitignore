@@ -1,8 +1,10 @@
 
-img/*
-image_hashes.csv
-error.json
-resultats.json
+data/img/*
+data/archive/*
+data/imgTrash/*
+data/image_hashes.csv
+data/error.json
+data/resultats.json
 
 !*/
 !.gitignore

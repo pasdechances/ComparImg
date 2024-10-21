@@ -7,10 +7,12 @@ import pandas as pd
 from collections import defaultdict
 
 
-IMAGE_DIR = './img' # Répertoire d'images à analyser
-CSV_FILE = 'image_hashes.csv'
-ERROR_FILE = 'error.json'
-RESULTS_FILE = 'resultats.json'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, '../data')
+IMAGE_DIR = os.path.join(DATA_DIR, '/img') # Répertoire d'images à analyser
+CSV_FILE = os.path.join(DATA_DIR, 'image_hashes.csv')
+ERROR_FILE = os.path.join(DATA_DIR, 'error.json')
+RESULTS_FILE = os.path.join(DATA_DIR, 'resultats.json')
 HASH_SIZE = 16 # Taille pour le hachage perceptuel, plus grand = plus de détail
 TOLERANCE = 90 # Tolérance en bits pour les différences,l'augmentation permet de détecter des images plus modifiées, mais peut générer plus de faux positifs
 
