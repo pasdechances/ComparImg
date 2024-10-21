@@ -1,3 +1,6 @@
+!*/
+!.gitignore
+!.gitkeep
 img/*
 image_hashes.csv
 error.json
