@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisation des Images en Double</title>
+</head>
+<body style="display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;">
+    <h1 >Images en Double</h1>
+    <div id="image-container" 
+        style="display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;">
+    </div>
+    
+    <div style="display: flex;
+                justify-content: space-between;
+                width: 100px;">
+        <button id="prev-button" disabled><<</button>
+        <span id="page"></span>
+        <button id="next-button">>></button>
+    </div>
+    
+    <br>
+    <div id="pagination-controls"></div>
+    <script src="./script.js"></script>
+</body>
+</html>

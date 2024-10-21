@@ -1,0 +1,27 @@
+{
+    "0": [
+        {
+            "image_id": 187,
+            "image_path": "D:/Mesdocuments/Photos/Sidney\\DSC02366.JPG",
+            "tag": "waiting"
+        },
+        {
+            "image_id": 186,
+            "image_path": "D:/Mesdocuments/Photos/Sidney\\DSC02365.JPG",
+            "tag": "waiting"
+        }
+    ],
+    "1": [
+        {
+            "image_id": 208,
+            "image_path": "D:/Mesdocuments/Photos/Sidney\\DSC02521.JPG",
+            "tag": "waiting"
+        },
+        {
+            "image_id": 207,
+            "image_path": "D:/Mesdocuments/Photos/Sidney\\DSC02520.JPG",
+            "tag": "waiting"
+        }
+    ],
+    "2": []
+}
