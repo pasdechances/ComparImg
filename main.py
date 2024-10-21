@@ -7,7 +7,7 @@ import pandas as pd
 from collections import defaultdict
 
 
-IMAGE_DIR = 'D:/Mesdocuments/Photos/Sidney' # Répertoire d'images à analyser
+IMAGE_DIR = './img' # Répertoire d'images à analyser
 CSV_FILE = 'image_hashes.csv'
 ERROR_FILE = 'error.json'
 RESULTS_FILE = 'resultats.json'
