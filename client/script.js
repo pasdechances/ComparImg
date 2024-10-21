@@ -29,7 +29,7 @@ function displayPage(page) {
         const [group_id, imgs] = duplicates[i];
         
         imgs.forEach(img => {
-            const imgBlock = createImageElement(group_id, img.image_id, img.image_path);
+            const imgBlock = createImageElement(group_id, img.image_id, img.image_path, img.tag);
             block.appendChild(imgBlock);
         });
 
@@ -38,7 +38,7 @@ function displayPage(page) {
     }
 }
 
-function createImageElement(group_id, image_id, image_path) {
+function createImageElement(group_id, image_id, image_path, tag) {
     const imgElement = document.createElement('img');
     //imgElement.src = path;
     imgElement.id = group_id+'_'+image_id
@@ -46,6 +46,15 @@ function createImageElement(group_id, image_id, image_path) {
     imgElement.alt = image_path;
     imgElement.style.width = '200px';
     imgElement.style.margin = '10px';
+    if(tag == "keep")
+        imgElement.style.borderStyle = 'solid';
+        imgElement.style.borderColor = 'green';
+        imgElement.style.borderRadius = '10px';
+        imgElement.style.borderWidth = '5px';
+    
+    if(tag == "trash")
+        imgElement.style.opacity = '0.2';
+    
     return imgElement;
 }
 
@@ -55,6 +64,8 @@ function createContainerElement() {
     element.style.borderColor = 'grey';
     element.style.borderRadius = '10px';
     element.style.borderWidth = '1px';
+    element.style.display = 'flex';
+    element.style.alignItems = 'center';
     return element;
 }
 

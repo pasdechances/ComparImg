@@ -1,7 +1,7 @@
 # ComparImg
 
 ComparImg analyse des images et detecte les doublons.
-Le programme identifie les images identiques, legerement modifiees, ou retournees et genere un fichier JSON listant les chemins des images en double.
+Le programme identifie les images identiques, legerement modifiees ou retournees et genere un fichier JSON listant les chemins des images en double.
 
 Les images peuvent avoir differentes tailles et resolutions.
 Les images peuvent être en formats BMP, JPG, JPEG, ou PNG.
