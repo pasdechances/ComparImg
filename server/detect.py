@@ -100,7 +100,7 @@ def find_duplicates(csv_file, results_file):
             duplicates[group_id].append({
                 "image_id": image_id,
                 "image_path": image_path,
-                "tag": "keep"
+                "tag": "waiting"
             })
             duplicate_groups.append({
                 "group_id": group_id,

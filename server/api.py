@@ -25,16 +25,14 @@ def get_duplicates():
         data = json.load(f)
     return jsonify(data)
 
-@app.route('/api/keep/<group_id>/<image_id>', methods=['POST'])
-def keepImg():
-    data = request.get_json()
-    update_result_file(data, "keep")
+@app.route('/api/img/keep/<group_id>/<image_id>', methods=['POST'])
+def keepImg(group_id, image_id):
+    update_result_file("keep", group_id, image_id)
     return jsonify({"status": "success", "message": "Tag keepall ajouté avec succès"})
 
-@app.route('/api/trow/<group_id>/<image_id>', methods=['POST'])
-def trowImg():
-    data = request.get_json()
-    update_result_file(data, "trash")
+@app.route('/api/img/trow/<group_id>/<image_id>', methods=['POST'])
+def trowImg(group_id, image_id):
+    update_result_file("trash", group_id, image_id)
     return jsonify({"status": "success", "message": "Tag keepall ajouté avec succès"})
 
 @app.route('/img/<group_id>/<image_id>')
@@ -49,11 +47,13 @@ def serve_image(group_id, image_id):
                 return send_from_directory(IMAGE_DIR, filename)
     return "Image not found", 404
 
-def update_result_file(data, tag):
+def update_result_file(tag, group_id, image_id):
     with open(JSON_FILE, 'r') as f:
         results = json.load(f)
-    for key in data:
-        results[key] = {"paths": results[key], "tag": tag}
+    if group_id in results:
+        for img in results[group_id]:
+            if str(img['image_id']) == image_id:
+                img['tag'] = tag
     with open(JSON_FILE, 'w') as f:
         json.dump(results, f, indent=4)
 

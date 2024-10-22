@@ -30,6 +30,7 @@ function displayPage(page) {
         
         imgs.forEach(img => {
             const imgBlock = createImageElement(group_id, img.image_id, img.image_path, img.tag);
+            imgBlock.addEventListener('click', (e) => handleImageClick(group_id, img.image_id, e.target.tag));
             row.appendChild(imgBlock);
         });
 
@@ -44,10 +45,11 @@ function createImageElement(group_id, image_id, image_path, tag) {
     imgElement.id = group_id+'_'+image_id
     imgElement.src = `${API}/img/${group_id}/${image_id}`;
     imgElement.alt = image_path;
+    imgElement.tag = tag;
     imgElement.classList.add('img');
     if(tag == "keep")
         imgElement.classList.add('keep');
-    else
+    else if(tag == "trash")
         imgElement.classList.add('trash');
 
     return imgElement;
@@ -79,30 +81,35 @@ function updatePaginationControls() {
     nextButton.disabled = currentPage === Math.ceil(duplicates.length / itemsPerPage);
 }
 
-
-function updateImageTag(group_id, image_id, newTag, imgElement) {
+function handleImageClick(group_id, image_id, currentTag) {
+    const newTag = currentTag === 'keep' ? 'trash' : 'keep';
+    const endpoint = newTag === 'keep' ? '/api/img/keep' : '/api/img/trow';
     
-    //fetch(API + '/api/trow/<group_id>/<image_id>'
-    fetch(API + '/api/keep/<group_id>/<image_id>', {
+    fetch(`${API}${endpoint}/${group_id}/${image_id}`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ group_id, image_id, newTag })
+        body: JSON.stringify({ group_id, image_id, tag: newTag }),
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            if (newTag === 'keep') {
-                imgElement.classList.replace('trash', 'keep');
-            } else if (newTag === 'trash') {
-                imgElement.classList.replace('keep', 'trash');
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const imgElement = document.getElementById(`${group_id}_${image_id}`);
+                imgElement.tag = newTag;
+                if(newTag == "keep"){
+                    imgElement.classList.remove('trash');
+                    imgElement.classList.add('keep');
+                }
+                else if(newTag == "trash"){
+                    imgElement.classList.remove('keep');
+                    imgElement.classList.add('trash');
+                }
+            } else {
+                console.error('Error updating tag:', data.message);
             }
-        } else {
-            console.error('Failed to update the tag.');
-        }
-    })
-    .catch(error => console.error('Erreur lors de la mise à jour du tag:', error));
+        })
+        .catch(error => console.error('Erreur lors de la mise à jour du tag:', error));
 }
 
 prevButton.addEventListener('click', () => {
