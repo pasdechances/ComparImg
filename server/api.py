@@ -12,18 +12,26 @@ JSON_FILE = os.path.join(DATA_DIR, 'resultats.json')
 IMAGE_DIR = os.path.join(DATA_DIR, 'img')
 
 @app.route('/', methods=['GET'])
-def get_index():
+def serve_index():
     return render_template('index.html')
 
-@app.route('/script.js')
-def get_script():
+@app.route('/script.js', methods=['GET'])
+def serve_script():
     return render_template('script.js', name='mark')
 
 @app.route('/api/duplicates', methods=['GET'])
-def get_duplicates():
+def serve_duplicates():
     with open(JSON_FILE, 'r') as f:
         data = json.load(f)
     return jsonify(data)
+
+@app.route('/api/detection', methods=['POST'])
+def launch_detect():
+    return 0
+
+@app.route('/api/sort', methods=['POST'])
+def launch_sorter():
+    return 0
 
 @app.route('/api/img/keep/<group_id>/<image_id>', methods=['PUT'])
 def keepImg(group_id, image_id):
@@ -35,7 +43,7 @@ def trowImg(group_id, image_id):
     update_result_file("trash", group_id, image_id)
     return jsonify({"status": "success", "message": "Tag keepall ajouté avec succès"})
 
-@app.route('/img/<group_id>/<image_id>')
+@app.route('/img/<group_id>/<image_id>', methods=['POST'])
 def serve_image(group_id, image_id):
     with open(os.path.join(DATA_DIR, 'resultats.json'), 'r') as f:
         data = json.load(f)
