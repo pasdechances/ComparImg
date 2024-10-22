@@ -25,12 +25,12 @@ def get_duplicates():
         data = json.load(f)
     return jsonify(data)
 
-@app.route('/api/img/keep/<group_id>/<image_id>', methods=['POST'])
+@app.route('/api/img/keep/<group_id>/<image_id>', methods=['PUT'])
 def keepImg(group_id, image_id):
     update_result_file("keep", group_id, image_id)
     return jsonify({"status": "success", "message": "Tag keepall ajouté avec succès"})
 
-@app.route('/api/img/trow/<group_id>/<image_id>', methods=['POST'])
+@app.route('/api/img/trow/<group_id>/<image_id>', methods=['DELETE'])
 def trowImg(group_id, image_id):
     update_result_file("trash", group_id, image_id)
     return jsonify({"status": "success", "message": "Tag keepall ajouté avec succès"})

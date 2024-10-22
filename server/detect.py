@@ -91,7 +91,8 @@ def find_duplicates(csv_file, results_file):
                     duplicates[group_id].append({
                         "image_id": other_image_id,
                         "image_path": other_image_path,
-                        "tag": "waiting"
+                        "tag": "waiting",
+                        "hamming_distance": hamming_distance
                     })
                     seen_images.add(other_image_id)
 
@@ -100,7 +101,8 @@ def find_duplicates(csv_file, results_file):
             duplicates[group_id].append({
                 "image_id": image_id,
                 "image_path": image_path,
-                "tag": "waiting"
+                "tag": "waiting",
+                "hamming_distance": "reference"
             })
             duplicate_groups.append({
                 "group_id": group_id,

@@ -29,8 +29,14 @@ function displayPage(page) {
         const [group_id, imgs] = duplicates[i];
         
         imgs.forEach(img => {
-            const imgBlock = createImageElement(group_id, img.image_id, img.image_path, img.tag);
-            imgBlock.addEventListener('click', (e) => handleImageClick(group_id, img.image_id, e.target.tag));
+            const imgBlock = document.createElement('div');
+            imgBlock.classList.add('container');
+            const imgElement = createImageElement(group_id, img.image_id, img.image_path, img.tag);
+            const infoElement = createInfoElement(img.hamming_distance);
+            const binElement = createBinElement(group_id, img.image_id, img.tag);
+            imgElement.addEventListener('click', () => keepImageClick(group_id, img.image_id));
+            binElement.addEventListener('click', () => trowImageClick(group_id, img.image_id));
+            imgBlock.append(imgElement, infoElement, binElement);
             row.appendChild(imgBlock);
         });
 
@@ -40,25 +46,45 @@ function displayPage(page) {
 }
 
 function createImageElement(group_id, image_id, image_path, tag) {
-    const imgElement = document.createElement('img');
-    //imgElement.src = path;
-    imgElement.id = group_id+'_'+image_id
-    imgElement.src = `${API}/img/${group_id}/${image_id}`;
-    imgElement.alt = image_path;
-    imgElement.tag = tag;
-    imgElement.classList.add('img');
+    const el = document.createElement('img');
+    //el.src = path;
+    el.id = group_id+'_'+image_id
+    el.src = `${API}/img/${group_id}/${image_id}`;
+    el.alt = image_path;
+    el.tag = tag;
+    el.classList.add('img');
     if(tag == "keep")
-        imgElement.classList.add('keep');
+        el.classList.add('keep');
     else if(tag == "trash")
-        imgElement.classList.add('trash');
+        el.classList.add('trash');
 
-    return imgElement;
+    return el;
+}
+
+function createBinElement(group_id, image_id, tag) {
+    const el = document.createElement('div');
+    el.id = group_id + '_' + image_id + '_bin'
+    el.innerText = "X"
+    el.classList.add('bin');
+    if(tag == "trash")
+        el.classList.add('hidden');
+    return el;
+}
+
+function createInfoElement(info) {
+    const el = document.createElement('p');
+    if(isNaN(info))
+        el.innerText = info
+    else
+        el.innerText = "Ecart : " + info
+    el.classList.add('score');
+    return el;
 }
 
 function createRowElement() {
-    const element = document.createElement('div');
-    element.classList.add('row');
-    return element;
+    const el = document.createElement('div');
+    el.classList.add('row');
+    return el;
 }
 
 function createPaginationControls() {
@@ -81,30 +107,47 @@ function updatePaginationControls() {
     nextButton.disabled = currentPage === Math.ceil(duplicates.length / itemsPerPage);
 }
 
-function handleImageClick(group_id, image_id, currentTag) {
-    const newTag = currentTag === 'keep' ? 'trash' : 'keep';
-    const endpoint = newTag === 'keep' ? '/api/img/keep' : '/api/img/trow';
+function keepImageClick(group_id, image_id) {
+    const newTag ='keep'
+    const id = `${group_id}_${image_id}`
+    const imgElement = document.getElementById(id);
+    if(imgElement.tag == newTag) return
     
-    fetch(`${API}${endpoint}/${group_id}/${image_id}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ group_id, image_id, tag: newTag }),
+    fetch(`${API}/api/img/keep/${group_id}/${image_id}`, {
+        method: 'PUT',
     })
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                const imgElement = document.getElementById(`${group_id}_${image_id}`);
+                const binElement = document.getElementById(`${id}_bin`);
                 imgElement.tag = newTag;
-                if(newTag == "keep"){
-                    imgElement.classList.remove('trash');
-                    imgElement.classList.add('keep');
-                }
-                else if(newTag == "trash"){
-                    imgElement.classList.remove('keep');
-                    imgElement.classList.add('trash');
-                }
+                imgElement.classList.remove('trash');
+                imgElement.classList.add('keep');
+                binElement.classList.remove('hidden')
+            } else {
+                console.error('Error updating tag:', data.message);
+            }
+        })
+        .catch(error => console.error('Erreur lors de la mise à jour du tag:', error));
+}
+
+function trowImageClick(group_id, image_id) {
+    const newTag ='trash'
+    const id = `${group_id}_${image_id}`
+    const imgElement = document.getElementById(id);
+    if(imgElement.tag == newTag) return
+    
+    fetch(`${API}/api/img/trow/${group_id}/${image_id}`, {
+        method: 'DELETE',
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const binElement = document.getElementById(`${id}_bin`);
+                imgElement.tag = newTag;
+                imgElement.classList.remove('keep');
+                imgElement.classList.add('trash');
+                binElement.classList.add('hidden')
             } else {
                 console.error('Error updating tag:', data.message);
             }
