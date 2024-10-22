@@ -12,7 +12,7 @@ Certain doublons d'images peuvent être de tailles differentes ou retournees et 
 - Detecte les doublons exacte
 - Detecte les doublons possible (variation de luminosite, changement mineur) soumis au faux positif.
 - Visualisateur de doublons
-- Tri les images en fonction des choix realise (WIP)
+- Tri les images en fonction des choix realise
 
 ## Ameliorations possibles
 ### front
