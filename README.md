@@ -16,7 +16,6 @@ Certain doublons d'images peuvent être de tailles differentes ou retournees et 
 
 ## Ameliorations possibles
 ### front
-- Selection des images a conserver
 - Ergonomie
 
 ### back
