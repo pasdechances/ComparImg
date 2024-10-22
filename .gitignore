@@ -6,6 +6,5 @@ data/image_hashes.csv
 data/error.json
 data/resultats.json
 
-!*/
 !.gitignore
 !.gitkeep
