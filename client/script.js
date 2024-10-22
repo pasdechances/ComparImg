@@ -3,6 +3,10 @@ const pageIndice = document.getElementById('page');
 const paginationControls = document.getElementById('pagination-controls');
 const prevButton = document.getElementById('prev-button');
 const nextButton = document.getElementById('next-button');
+const detectorLaunch = document.getElementById('Detector-Launch');
+const detectorConfigure = document.getElementById('Detector-Configure');
+const sorterLaunch = document.getElementById('Sorter-Launch');
+const sorterConfigure = document.getElementById('Sorter-Configure');
 let duplicates = [];
 const itemsPerPage = 10;
 let currentPage = 1;
@@ -84,6 +88,7 @@ function createInfoElement(info) {
 function createRowElement() {
     const el = document.createElement('div');
     el.classList.add('row');
+    el.classList.add('box');
     return el;
 }
 
@@ -114,7 +119,7 @@ function keepImageClick(group_id, image_id) {
     if(imgElement.tag == newTag) return
     
     fetch(`${API}/api/img/keep/${group_id}/${image_id}`, {
-        method: 'PUT',
+        method: 'PUT'
     })
         .then(response => response.json())
         .then(data => {
@@ -169,6 +174,30 @@ nextButton.addEventListener('click', () => {
         displayPage(currentPage);
         updatePaginationControls();
     }
+});
+
+detectorLaunch.addEventListener('click', () => {
+    fetch(`${API}/api/detection`, {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .catch(error => console.error('Erreur :', error));
+});
+
+detectorConfigure.addEventListener('click', () => {
+    
+});
+
+sorterLaunch.addEventListener('click', () => {
+    fetch(`${API}/api/sort`, {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .catch(error => console.error('Erreur :', error));
+});
+
+sorterConfigure.addEventListener('click', () => {
+    
 });
 
 
