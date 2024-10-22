@@ -11,7 +11,7 @@ Certain doublons d'images peuvent être de tailles differentes ou retournees et 
 
 - Detecte les doublons exacte
 - Detecte les doublons possible (variation de luminosite, changement mineur) soumis au faux positif.
-- Visualisateur de doublons
+- Administration et choix du sort final des images detectes comme double
 - Tri les images en fonction des choix realise
 
 ## Ameliorations possibles
