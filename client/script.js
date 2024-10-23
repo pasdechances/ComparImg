@@ -5,6 +5,7 @@ const prevButton = document.getElementById('prev-button');
 const nextButton = document.getElementById('next-button');
 const detectorLaunch = document.getElementById('launch-detector');
 const sorterLaunch = document.getElementById('launch-sorter');
+const clear = document.getElementById('clear');
 let duplicates = [];
 const itemsPerPage = 10;
 let currentPage = 1;
@@ -234,9 +235,22 @@ function checkScriptStatus() {
         .catch(error => console.error('Error checking script status:', error));
 }
 
+function SendClearRequest(){
+    fetch('http://localhost:5000/api/clear', {
+        method: 'DELETE'
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            getDuplicates()
+        })
+        .catch(error => console.error('Error:', error));
+}
 
 sorterLaunch.addEventListener('click', SendSortRequest);
 detectorLaunch.addEventListener('click', SendDetectionRequest);
+
+clear.addEventListener('click', SendClearRequest);
 
 prevButton.addEventListener('click', () => {
     if (currentPage > 1) {
