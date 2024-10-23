@@ -9,7 +9,6 @@ CORS(app)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'data'))
 JSON_FILE = os.path.join(DATA_DIR, 'resultats.json')
-IMAGE_DIR = os.path.join(DATA_DIR, 'img')
 
 @app.route('/', methods=['GET'])
 def serve_index():
