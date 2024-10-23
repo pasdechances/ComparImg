@@ -66,12 +66,12 @@ def launch_sorter():
     if SCRIPT_RUNNING:
         return jsonify({"status": "error", "message": "Script is already running"}), 409
     data = request.get_json()
-    if isinstance(data.get('trash_folder'), int):
-        trash_folder = data.get('trash_folder')
     script_path = os.path.join(BASE_DIR, 'sorter.py')
     command = ['python', script_path]
-    if trash_folder:
-        command.extend(['-t', str(trash_folder)])
+    if isinstance(data.get('trash_folder'), int):
+        trash_folder = data.get('trash_folder')
+        if trash_folder:
+            command.extend(['-t', str(trash_folder)])
     try:
         lock.acquire()
         SCRIPT_RUNNING = True
