@@ -1,12 +1,8 @@
 import os
 import json
 import shutil
+import argparse
 
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'data'))
-INPUT_FILE = os.path.join(DATA_DIR, 'resultats.json')
-TRASH_FOLDER = os.path.join(DATA_DIR, 'imgTrash')
 
 def load_tags(json_file):
     with open(json_file, 'r') as f:
@@ -39,8 +35,16 @@ def move_images(tags, trash_dir):
     print(f"{trash} moved in trash, {error} errors encountred")
 
 def main():   
-    tags = load_tags(INPUT_FILE)
-    move_images(tags, TRASH_FOLDER)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.abspath(os.path.join(base_dir, '..', 'data'))
+    input_file = os.path.join(data_dir, 'resultats.json')
+
+    parser = argparse.ArgumentParser(description='sorter.py arguments')
+    parser.add_argument('-t', '--trash_folder', type=str, help="Répertoire d'images non retenue. Valeur par defaut : ../data/imgTrash", default=os.path.join(data_dir, 'imgTrash'))
+    args = parser.parse_args()
+
+    tags = load_tags(input_file)
+    move_images(tags, args.trash_folder)
 
 if __name__ == "__main__":
     main()
