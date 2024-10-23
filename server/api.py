@@ -43,7 +43,7 @@ def trowImg(group_id, image_id):
     update_result_file("trash", group_id, image_id)
     return jsonify({"status": "success", "message": "Tag keepall ajouté avec succès"})
 
-@app.route('/img/<group_id>/<image_id>', methods=['POST'])
+@app.route('/img/<group_id>/<image_id>', methods=['GET'])
 def serve_image(group_id, image_id):
     with open(os.path.join(DATA_DIR, 'resultats.json'), 'r') as f:
         data = json.load(f)
@@ -51,9 +51,8 @@ def serve_image(group_id, image_id):
         for img in data[group_id]:
             if str(img['image_id']) == image_id:
                 img_path = img['image_path']
-                filename = os.path.basename(img_path)
-                return send_from_directory(IMAGE_DIR, filename)
-    return "Image not found", 404
+                return send_from_directory(os.path.dirname(img_path), os.path.basename(img_path))
+    return "Image not found", 404 
 
 def update_result_file(tag, group_id, image_id):
     with open(JSON_FILE, 'r') as f:
