@@ -7,6 +7,7 @@ import imagehash
 import pandas as pd
 from collections import defaultdict
 
+
 HASH_SIZE = 16
 TOLERANCE = 90
 error_log = []
@@ -129,7 +130,7 @@ def main():
     global HASH_SIZE, TOLERANCE
     HASH_SIZE = args.hsize
     TOLERANCE = args.tolerance
-
+           
     analyze_images(args.image_dir, csv_file)
     find_duplicates(csv_file, results_file)
     write_error_log(error_file)
