@@ -244,7 +244,6 @@ function checkSorterStatus() {
                 clearInterval(statusInterval);
                 console.log('Script finished');
                 SendClearRequest()
-                getDuplicates()
             }
         })
         .catch(error => console.error('Error checking script status:', error));
