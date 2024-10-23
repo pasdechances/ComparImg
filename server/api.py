@@ -27,6 +27,7 @@ def serve_static(filename):
 
 @app.route('/api/duplicates', methods=['GET'])
 def serve_duplicates():
+    global JSON_FILE
     with open(JSON_FILE, 'r') as f:
         data = json.load(f)
     return jsonify(data)
@@ -57,7 +58,7 @@ def launch_detect():
         SCRIPT_RUNNING = True
         thread = threading.Thread(target=run_script, args=(command,lock))
         thread.start()
-        return jsonify({"status": "success", "message": "Detection started started"}), 202
+        return jsonify({"status": "success", "message": "Detect started"}), 202
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
@@ -79,7 +80,7 @@ def launch_sorter():
         SCRIPT_RUNNING = True
         thread = threading.Thread(target=run_script, args=(command,lock))
         thread.start()
-        return jsonify({"status": "success", "message": "Detection started started"}), 202
+        return jsonify({"status": "success", "message": "Sort started"}), 202
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
@@ -97,7 +98,7 @@ def keepImg(group_id, image_id):
 @app.route('/api/img/trow/<group_id>/<image_id>', methods=['DELETE'])
 def trowImg(group_id, image_id):
     update_result_file("trash", group_id, image_id)
-    return jsonify({"status": "success", "message": "Tag keepall ajouté avec succès"})
+    return jsonify({"status": "success", "message": "Trash tag added"})
 
 @app.route('/img/<group_id>/<image_id>', methods=['GET'])
 def serve_image(group_id, image_id):
@@ -110,7 +111,21 @@ def serve_image(group_id, image_id):
                 return send_from_directory(os.path.dirname(img_path), os.path.basename(img_path))
     return "Image not found", 404 
 
+@app.route('/api/clear', methods=['DELETE'])
+def api_clear():
+    global JSON_FILE
+    csv_file = os.path.join(DATA_DIR, 'image_hashes.csv')
+    try:
+        with open(JSON_FILE, 'w') as f:
+            f.truncate(0)
+        with open(csv_file, 'w') as f:
+            f.truncate(0)
+        return jsonify({"status": "success", "message": "Files emptied successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+
 def update_result_file(tag, group_id, image_id):
+    global JSON_FILE
     with open(JSON_FILE, 'r') as f:
         results = json.load(f)
     if group_id in results:
@@ -119,8 +134,6 @@ def update_result_file(tag, group_id, image_id):
                 img['tag'] = tag
     with open(JSON_FILE, 'w') as f:
         json.dump(results, f, indent=4)
-
-
 
 def run_script(command, script_lock_var):
     global SCRIPT_RUNNING
