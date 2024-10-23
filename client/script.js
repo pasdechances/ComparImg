@@ -186,8 +186,8 @@ function SendDetectionRequest(){
     .then(data => {
         console.log(data);
         if (data.status === 'success') {
-            statusInterval = setInterval(checkScriptStatus, interval);
-            checkScriptStatus();
+            statusInterval = setInterval(checkDetectorStatus, interval);
+            checkDetectorStatus();
         } else {
             console.error('Error starting script:', data.message);
         }
@@ -212,8 +212,8 @@ function SendSortRequest(){
     .then(data => {
         console.log(data);
         if (data.status === 'success') {
-            statusInterval = setInterval(checkScriptStatus, interval);
-            checkScriptStatus();
+            statusInterval = setInterval(checkSorterStatus, interval);
+            checkSorterStatus();
         } else {
             console.error('Error starting script:', data.message);
         }
@@ -221,7 +221,7 @@ function SendSortRequest(){
     .catch(error => console.error('Error:', error));
 }
 
-function checkScriptStatus() {
+function checkDetectorStatus() {
     fetch('http://localhost:5000/api/script-status')
         .then(response => response.json())
         .then(data => {
@@ -229,6 +229,21 @@ function checkScriptStatus() {
             if (data.status === 'idle') {
                 clearInterval(statusInterval);
                 console.log('Script finished');
+                getDuplicates()
+            }
+        })
+        .catch(error => console.error('Error checking script status:', error));
+}
+
+function checkSorterStatus() {
+    fetch('http://localhost:5000/api/script-status')
+        .then(response => response.json())
+        .then(data => {
+            console.log(`Script status: ${data.status}`);
+            if (data.status === 'idle') {
+                clearInterval(statusInterval);
+                console.log('Script finished');
+                SendClearRequest()
                 getDuplicates()
             }
         })
