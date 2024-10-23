@@ -109,7 +109,7 @@ def api_clear():
     csv_file = os.path.join(DATA_DIR, 'image_hashes.csv')
     try:
         with open(JSON_FILE, 'w') as f:
-            f.truncate(0)
+            f.write('{}')
         with open(csv_file, 'w') as f:
             f.truncate(0)
         return jsonify({"status": "success", "message": "Files emptied successfully"})
