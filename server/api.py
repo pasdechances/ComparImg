@@ -18,9 +18,6 @@ SCRIPT_RUNNING = False
 def serve_index():
     return render_template('index.html')
 
-# @app.route('/script.js', methods=['GET'])
-# def serve_script():
-#     return render_template('script.js', name='mark')
 @app.route('/<path:filename>', methods=['GET'])
 def serve_static(filename):
     return send_from_directory(app.static_folder, filename)
@@ -89,11 +86,6 @@ def script_status():
     global SCRIPT_RUNNING
     status = "running" if SCRIPT_RUNNING else "idle"
     return jsonify({"status": status}) 
-
-@app.route('/api/img/keep/<group_id>/<image_id>', methods=['PUT'])
-def keepImg(group_id, image_id):
-    update_result_file("keep", group_id, image_id)
-    return jsonify({"status": "success", "message": "Tag keepall ajouté avec succès"})
 
 @app.route('/api/img/trow/<group_id>/<image_id>', methods=['DELETE'])
 def trowImg(group_id, image_id):
