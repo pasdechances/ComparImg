@@ -3,24 +3,27 @@ const pageIndice = document.getElementById('page');
 const paginationControls = document.getElementById('pagination-controls');
 const prevButton = document.getElementById('prev-button');
 const nextButton = document.getElementById('next-button');
-const detectorLaunch = document.getElementById('Detector-Launch');
-const detectorConfigure = document.getElementById('Detector-Configure');
-const sorterLaunch = document.getElementById('Sorter-Launch');
-const sorterConfigure = document.getElementById('Sorter-Configure');
+const detectorLaunch = document.getElementById('launch-detector');
+const sorterLaunch = document.getElementById('launch-sorter');
 let duplicates = [];
 const itemsPerPage = 10;
 let currentPage = 1;
+let statusInterval;
+const interval = 1000;
 const API = 'http://localhost:5000';
 
 // Charger les données JSON via l'API Flask
-fetch(API+'/api/duplicates')
+function getDuplicates(){
+    fetch(API+'/api/duplicates')
     .then(response => response.json())
     .then(data => {
         duplicates = Object.entries(data); 
         displayPage(1);
         createPaginationControls();
     })
-    .catch(error => console.error('Erreur lors du chargement du fichier JSON:', error));
+    .catch(error => console.error('Error loading JSON file :', error));
+}
+getDuplicates()
 
 function displayPage(page) {
     pageIndice.innerHTML = page
@@ -133,7 +136,7 @@ function keepImageClick(group_id, image_id) {
                 console.error('Error updating tag:', data.message);
             }
         })
-        .catch(error => console.error('Erreur lors de la mise à jour du tag:', error));
+        .catch(error => console.error('Error updating tag:', error));
 }
 
 function trowImageClick(group_id, image_id) {
@@ -157,8 +160,83 @@ function trowImageClick(group_id, image_id) {
                 console.error('Error updating tag:', data.message);
             }
         })
-        .catch(error => console.error('Erreur lors de la mise à jour du tag:', error));
+        .catch(error => console.error('Error updating tag:', error));
 }
+
+function SendDetectionRequest(){
+    const form = document.getElementById('form-detection');
+    const data = {};
+    const imageDir = form.image_dir.value;
+    const hsize = form.hsize.value;
+    const tolerance = form.tolerance.value;
+
+    if (imageDir) data.image_dir = imageDir;
+    if (hsize) data.hsize = parseInt(hsize);
+    if (tolerance) data.tolerance = parseInt(tolerance);
+
+    fetch('/api/detection', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.status === 'success') {
+            statusInterval = setInterval(checkScriptStatus, interval);
+            checkScriptStatus();
+        } else {
+            console.error('Error starting script:', data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function SendSortRequest(){
+    const form = document.getElementById('form-sorter');
+    const data = {};
+    const trashDir = form.trash_folder.value;
+
+    if (trashDir) data.trash_folder = trashDir;
+    fetch('/api/sort', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.status === 'success') {
+            statusInterval = setInterval(checkScriptStatus, interval);
+            checkScriptStatus();
+        } else {
+            console.error('Error starting script:', data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function checkScriptStatus() {
+    fetch('http://localhost:5000/api/script-status')
+        .then(response => response.json())
+        .then(data => {
+            console.log(`Script status: ${data.status}`);
+            if (data.status === 'idle') {
+                clearInterval(statusInterval);
+                console.log('Script finished');
+                getDuplicates()
+            }
+        })
+        .catch(error => console.error('Error checking script status:', error));
+}
+
+
+sorterLaunch.addEventListener('click', SendSortRequest);
+detectorLaunch.addEventListener('click', SendDetectionRequest);
 
 prevButton.addEventListener('click', () => {
     if (currentPage > 1) {
@@ -175,30 +253,3 @@ nextButton.addEventListener('click', () => {
         updatePaginationControls();
     }
 });
-
-detectorLaunch.addEventListener('click', () => {
-    fetch(`${API}/api/detection`, {
-        method: 'POST'
-    })
-    .then(response => response.json())
-    .catch(error => console.error('Erreur :', error));
-});
-
-detectorConfigure.addEventListener('click', () => {
-    
-});
-
-sorterLaunch.addEventListener('click', () => {
-    fetch(`${API}/api/sort`, {
-        method: 'POST'
-    })
-    .then(response => response.json())
-    .catch(error => console.error('Erreur :', error));
-});
-
-sorterConfigure.addEventListener('click', () => {
-    
-});
-
-
-
