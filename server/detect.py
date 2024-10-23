@@ -1,20 +1,12 @@
 import os
 import csv
 import json
+import argparse
 from PIL import Image, UnidentifiedImageError
 import imagehash
 import pandas as pd
 from collections import defaultdict
 
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'data'))
-IMAGE_DIR = os.path.join(DATA_DIR, 'img') # Répertoire d'images à analyser par defaut
-CSV_FILE = os.path.join(DATA_DIR, 'image_hashes.csv')
-ERROR_FILE = os.path.join(DATA_DIR, 'error.json')
-RESULTS_FILE = os.path.join(DATA_DIR, 'resultats.json')
-HASH_SIZE = 16 # Taille pour le hachage perceptuel, plus grand = plus de détail
-TOLERANCE = 90 # Tolérance en bits pour les différences,l'augmentation permet de détecter des images plus modifiées, mais peut générer plus de faux positifs
 
 error_log = []
 hash_dict = {}
@@ -119,10 +111,26 @@ def write_error_log(error_file):
         json.dump(error_log, file, indent=4)
 
 def main():
-    analyze_images(IMAGE_DIR, CSV_FILE)
-    find_duplicates(CSV_FILE, RESULTS_FILE)
-    write_error_log(ERROR_FILE)
-    print(f"Analyse terminée. Résultats dans {RESULTS_FILE} et erreurs dans {ERROR_FILE}")
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.abspath(os.path.join(base_dir, '..', 'data'))
+    csv_file = os.path.join(data_dir, 'image_hashes.csv')
+    error_file = os.path.join(data_dir, 'error.json')
+    results_file = os.path.join(data_dir, 'resultats.json')
+
+    parser = argparse.ArgumentParser(description='detect.py arguments')
+    parser.add_argument('-i', '--image_dir', type=str, help="Répertoire d'images à analyser. Valeur par defaut : ../data/img", default=os.path.join(data_dir, 'img'))
+    parser.add_argument('-s', '--hsize', type=int, help='Taille pour le hachage perceptuel, plus grand = plus de détail. Valeur par defaut : 16', default=16)
+    parser.add_argument('-t', '--tolerance', type=int, help="Tolérance en bits pour les différences, l'augmentation permet de détecter des images plus modifiées, mais peut générer plus de faux positifs. Valeur par defaut : 90", default=90)
+    args = parser.parse_args()
+
+    global HASH_SIZE, TOLERANCE
+    HASH_SIZE = args.hsize
+    TOLERANCE = args.tolerance
+
+    analyze_images(args.image_dir, csv_file)
+    find_duplicates(csv_file, results_file)
+    write_error_log(error_file)
+    print(f"Analyse terminée. Résultats dans {results_file} et erreurs dans {error_file}")
 
 if __name__ == '__main__':
     main()
