@@ -7,12 +7,14 @@ import imagehash
 import pandas as pd
 from collections import defaultdict
 
-
+HASH_SIZE = 16
+TOLERANCE = 90
 error_log = []
 hash_dict = {}
 
 
 def calculate_image_hash(image_path):
+    global HASH_SIZE
     try:
         with Image.open(image_path) as img:
             try:
@@ -55,6 +57,7 @@ def read_csv_with_utf8(csv_file):
         return df
 
 def find_duplicates(csv_file, results_file):
+    global TOLERANCE
     group_id = 0
     duplicate_groups = []
     seen_images = set()  
