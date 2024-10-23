@@ -9,7 +9,7 @@ from collections import defaultdict
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'data'))
-IMAGE_DIR = os.path.join(DATA_DIR, 'img') # Répertoire d'images à analyser
+IMAGE_DIR = os.path.join(DATA_DIR, 'img') # Répertoire d'images à analyser par defaut
 CSV_FILE = os.path.join(DATA_DIR, 'image_hashes.csv')
 ERROR_FILE = os.path.join(DATA_DIR, 'error.json')
 RESULTS_FILE = os.path.join(DATA_DIR, 'resultats.json')
