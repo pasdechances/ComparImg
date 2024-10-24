@@ -68,6 +68,6 @@ enfin pour visualiser le resultat RDV sur http://localhost:5000/
 
 2. Via IHM
 
-RDV sur http://localhost:5000/, dans l'encart "Detector" clickez sur custom, placez le chemin du dossier contenant les images (recusif : inspectera les sous dossier).
-Regler les differents parametre et clicker sur "launch" pour lancer le job
+RDV sur http://localhost:5000/, dans l'encart "Detector" clickez sur custom, placez le chemin du dossier contenant les images (recursif : inspectera les sous dossier).
+Reglez les differents parametreq et clickez sur "launch" pour lancer le job
 Le resultat s'affichera a la fin du job.
