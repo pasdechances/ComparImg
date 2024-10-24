@@ -59,7 +59,13 @@ Lancer le serveur "api.py"
 
 Deux option sont disponible pour la suite : 
 
-1. Via script 
+1. Via IHM
+
+RDV sur http://localhost:5000/, dans l'encart "Detector" clickez sur custom, placez le chemin du dossier contenant les images (recursif : inspectera les sous dossier).
+Reglez les differents parametres et clickez sur "launch" pour lancer le job
+Le resultat s'affichera a la fin du job.
+
+2. Via script 
 
 Placer des dossiers d'images ou des images dans le repertoire img puis lancer le job de detection detect.py
 
@@ -71,8 +77,3 @@ une aide est disponible avec
 
 enfin pour visualiser le resultat RDV sur http://localhost:5000/
 
-2. Via IHM
-
-RDV sur http://localhost:5000/, dans l'encart "Detector" clickez sur custom, placez le chemin du dossier contenant les images (recursif : inspectera les sous dossier).
-Reglez les differents parametres et clickez sur "launch" pour lancer le job
-Le resultat s'affichera a la fin du job.
