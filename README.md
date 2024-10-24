@@ -17,6 +17,11 @@ Certain doublons d'images peuvent être de tailles differentes ou retournees et 
 - Consulter l'etat des job via api
 - Parametrer les jobs via api
 
+## Information
+
+- Le hsize est la laille pour le hachage perceptuel, plus grand = plus de détail.
+- La tolérance est une valeur en bits pour le nombre de différences percue, l'augmentation permet de détecter des images plus modifiées, mais peut générer plus de faux positifs.
+
 ## Ameliorations possibles
 ### front
 - Ergonomie
