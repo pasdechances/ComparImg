@@ -77,3 +77,97 @@ une aide est disponible avec
 
 enfin pour visualiser le resultat RDV sur http://localhost:5000/
 
+
+
+# Image Compressor CLI (PNG / JPG / JPEG)
+
+Outil en ligne de commande en Python permettant de compresser et redimensionner des images (PNG, JPG, JPEG) à l’aide de la bibliothèque Pillow.
+
+Il peut traiter :
+
++ des fichiers individuels
++ des dossiers entiers
++ des dossiers récursivement
+avec gestion de la qualité, de la résolution, du ratio, d’un seuil de taille et des fichiers sources.
+
+## Fonctionnalités
+
++ Compression par qualité (1 à 100)
++ Redimensionnement avec ou sans conservation du ratio
++ Traitement de fichiers ou de dossiers
++ Parcours récursif des sous-dossiers
++ Seuil de taille minimale (en Mo)
++ Écrasement ou création d’un nouveau fichier
++ Suppression automatique du fichier source (optionnel)
+
+
+## Prérequis
+
++ Python 3.8+
++ Pillow
+
+## Installation
+
+    pip install pillow
+
+## Utilisation
+
+    python compress.py [options] [files...]
+
+## Options disponibles
+
+Option	Description
+
+    -p, --directory	Dossier contenant les images
+    -r, --recursive	Parcours récursif
+    files	Fichiers images à traiter
+    -m, --modify-source	Modifie le fichier source
+    -d, --delete-source	Supprime le fichier source après compression
+    -c, --compression	Qualité (1–100, défaut: 100)
+    -x, --resolution	Résolution cible (ex: 1920x1080)
+    -n, --no-ratio	Ne conserve pas le ratio
+    -s, --size-threshold	Taille minimale en Mo (défaut: 1)
+
+## Exemples
+
+Compresser une image
+    
+    py compress.py photo.jpg -c 85
+
+Redimensionner
+
+    py compress.py -p images/ -x 1280x720 -c 85
+
+Traitement récursif
+    
+    py compress.py -p images/ -r
+
+Modifier les fichiers originaux
+
+    py compress.py -p images/ -m -c 80
+
+Supprimer les fichiers sources après compression
+
+    py compress.py -p images/ -d
+
+Ignorer les fichiers < 2 Mo
+
+    py compress.py -p images/ -s 2
+
+Forcer une résolution sans ratio
+
+    py compress.py image.jpg -x 800x600 -n
+
+
+## Comportement par défaut
+
++ Ajout du suffixe _resize au fichier compressé
++ Conservation du ratio activée
++ Seuil minimum : 1 Mo
++ Aucun fichier supprimé ou écrasé sans option explicite
+
+## Formats supportés
+
++ PNG
++ JPG
++ JPEG
